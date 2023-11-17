@@ -1,0 +1,32 @@
+#const k=3.
+cell(1,1,3).
+cell(1,4,8).
+cell(3,4,4).
+cell(3,8,5).
+cell(4,7,2).
+cell(4,8,7).
+cell(5,6,3).
+cell(6,6,9).
+cell(7,4,5).
+cell(7,5,6).
+
+r(0..(k*k)-1).
+c(0..(k*k)-1).
+n(1..k*k).
+
+{cell(R, C, N) : n(N)} = 1 :- r(R), c(C).
+
+block(R, I, C, J) :- r(R), r(I), R/k == I/k, c(C), c(J), C/k == J/k.
+
+bomb(R, I, C, J) :- r(R), r(I), c(C), c(J), R+(-1;0;1) == I, C+(-1;0;1) == J.
+
+knight(R, I, C, J) :- r(R), r(I), c(C), c(J), R+(-2;2) == I, C+(-1;1) == J.
+knight(R, I, C, J) :- r(R), r(I), c(C), c(J), R+(-1;1) == I, C+(-2;2) == J.
+
+:- cell(R, C, N), cell(I, C, N), R != I.
+:- cell(R, C, N), cell(R, J, N), C != J.
+:- cell(R, C, N), cell(I, J, N), block(R, I, C, J), R != I, C != J.
+:- cell(R, C, N), cell(I, J, N), bomb(R, I, C, J), R != I, C != J.
+:- cell(R, C, N), cell(I, J, N), knight(R, I, C, J), R != I, C != J.
+
+#show cell/3.
